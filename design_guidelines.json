@@ -1,0 +1,132 @@
+{
+  "project_name": "RiseUp AI",
+  "theme": "dark",
+  "archetype": "Archetype 2: The Performance Pro (Tactical Empathy Variant)",
+  "design_philosophy": "A fusion of elite athleticism precision (Archetype 2) with approachable AI warmth. Designed as a 'mobile-first web app' to simulate the Expo React Native experience. Avoids generic SaaS looks by using deep obsidian backgrounds, vibrant energetic accents, and premium glassmorphic depth.",
+  "typography": {
+    "heading_font": "Outfit",
+    "body_font": "Manrope",
+    "import_instruction": "Import Outfit and Manrope from Google Fonts in index.html.",
+    "hierarchy": {
+      "h1": "text-4xl sm:text-5xl tracking-tight font-bold leading-tight",
+      "h2": "text-2xl sm:text-3xl tracking-tight font-semibold",
+      "h3": "text-xl sm:text-2xl tracking-tight font-semibold",
+      "h4": "text-lg font-semibold",
+      "body": "text-base leading-relaxed text-neutral-300",
+      "small": "text-sm text-neutral-400",
+      "overline": "text-xs font-bold uppercase tracking-[0.2em] text-neutral-500"
+    }
+  },
+  "colors": {
+    "background": {
+      "app": "bg-[#0A0A0A]",
+      "card": "bg-[#141414]",
+      "glass": "bg-[#1A1A1A]/60 backdrop-blur-xl"
+    },
+    "primary": {
+      "brand": "#FF5E00",
+      "tailwind": "text-orange-500",
+      "bg": "bg-orange-500",
+      "hover": "hover:bg-orange-400 hover:text-white"
+    },
+    "secondary": {
+      "brand": "#3B82F6",
+      "tailwind": "text-blue-500",
+      "bg": "bg-blue-500"
+    },
+    "gradients": {
+      "kinetic_trigger": "bg-gradient-to-br from-orange-500 to-rose-600",
+      "premium_card": "bg-gradient-to-tr from-[#141414] to-[#1F1F1F]"
+    },
+    "borders": {
+      "subtle": "border border-white/5",
+      "glass": "border border-white/10",
+      "active": "border border-orange-500/50"
+    },
+    "text": {
+      "primary": "text-white",
+      "secondary": "text-neutral-400",
+      "muted": "text-neutral-500"
+    },
+    "status": {
+      "success": "text-emerald-400 bg-emerald-400/10",
+      "warning": "text-amber-400 bg-amber-400/10",
+      "danger": "text-red-500 bg-red-500/10"
+    }
+  },
+  "layout_and_spacing": {
+    "container": "w-full max-w-[430px] mx-auto min-h-screen bg-[#0A0A0A] relative pb-24 shadow-2xl overflow-x-hidden",
+    "spacing_system": {
+      "section_gap": "gap-8",
+      "element_gap": "gap-4",
+      "card_padding": "p-6"
+    },
+    "grid_modes": {
+      "bento_dashboard": "grid grid-cols-2 gap-4",
+      "full_span": "col-span-2"
+    },
+    "border_radius": {
+      "app": "rounded-[3rem]",
+      "card": "rounded-3xl",
+      "button": "rounded-full",
+      "input": "rounded-2xl"
+    }
+  },
+  "components": {
+    "bottom_nav": "Fixed bottom-0 w-full max-w-[430px] mx-auto h-20 bg-[#0A0A0A]/80 backdrop-blur-2xl border-t border-white/5 flex justify-around items-center px-4 z-50 rounded-b-[3rem]",
+    "button_primary": "w-full rounded-full px-6 py-4 font-semibold text-white bg-gradient-to-br from-orange-500 to-rose-600 shadow-[0_0_20px_rgba(255,94,0,0.3)] transition-all active:scale-95 hover:shadow-[0_0_30px_rgba(255,94,0,0.5)]",
+    "button_secondary": "w-full rounded-full px-6 py-4 font-semibold text-white bg-[#1A1A1A] border border-white/10 transition-all active:scale-95 hover:bg-[#222222]",
+    "card": "bg-[#141414] border border-white/5 rounded-3xl p-6 relative overflow-hidden",
+    "glass_panel": "bg-[#1A1A1A]/60 backdrop-blur-2xl border border-white/10 rounded-3xl p-6",
+    "input_field": "w-full bg-[#141414] border border-white/10 rounded-2xl px-5 py-4 text-white focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500 outline-none transition-all placeholder:text-neutral-500",
+    "avatar": "w-14 h-14 rounded-full border-2 border-transparent bg-clip-padding"
+  },
+  "media_and_assets": {
+    "icons": "lucide-react",
+    "images": [
+      {
+        "url": "https://customer-assets.emergentagent.com/job_7d159709-333f-4945-b3c6-e2ec9dd90a7e/artifacts/5bk4g0l7_Manalilogo.jpg",
+        "category": "Partner Logo",
+        "description": "Manali Tech Logo. Must appear in footer/settings linking to https://manalitech.com."
+      },
+      {
+        "url": "https://images.pexels.com/photos/13026928/pexels-photo-13026928.jpeg",
+        "category": "Onboarding Background",
+        "description": "Dark smooth abstract 3D glassmorphism for onboarding hero background."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1713160624556-0ba2b55de518",
+        "category": "AI Persona Avatar (Strict/Military)",
+        "description": "Strict Coach profile picture (dark dramatic lighting)."
+      },
+      {
+        "url": "https://images.pexels.com/photos/13180244/pexels-photo-13180244.jpeg",
+        "category": "AI Persona Avatar (Friendly/Creative)",
+        "description": "Abstract colorful 3D shape for friendly AI avatars."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1557264322-b44d383a2906",
+        "category": "Wellness/Meditation Module Background",
+        "description": "Abstract peaceful dark space with glowing green/pink aura for mental wellness features."
+      }
+    ]
+  },
+  "motion_and_interactions": {
+    "philosophy": "Animations should feel kinetic and responsive, never sluggish. Emphasize micro-interactions for gamification.",
+    "page_transitions": "Use Framer Motion to stagger bento grid items on mount (delay: 0.05 * index, y: 20 -> 0, opacity: 0 -> 1).",
+    "active_states": "All buttons and interactive cards must have active:scale-[0.97] to feel tactile like a native app."
+  },
+  "testing_attributes": {
+    "rule": "All interactive and key informational elements MUST include a data-testid attribute.",
+    "format": "kebab-case, role-based (e.g., data-testid='login-submit-button', data-testid='task-toggle')"
+  },
+  "instructions_to_main_agent": [
+    "Build the application as a highly responsive, mobile-first web app mimicking a native Expo mobile experience (restrict max-width to 430px and center it).",
+    "Import 'Outfit' and 'Manrope' fonts from Google Fonts.",
+    "Enforce the Tactical Empathy dark mode palette strictly; avoid pure black/white where tinted neutral grays add depth.",
+    "For the Manali Tech logo, display it prominently in the Settings/Profile screen footer wrapped in an anchor tag linking to https://manalitech.com.",
+    "Construct the Dashboard using a Bento grid format (grid-cols-2) with tightly packed cards representing streaks, tasks, mood, water, and focus.",
+    "Utilize Framer Motion for micro-interactions (press scale effects) and staggering list entrances.",
+    "Implement the Smart Alarm verification UI using an immersive glassmorphic overlay over the dark background."
+  ]
+}
