@@ -1,0 +1,59 @@
+{
+  "summary": "Backend test suite executed against RiseUp AI FastAPI backend. 30/32 tests pass (93.75%). Auth, onboarding, personality, goals CRUD, tasks + XP, habits + streak, mood, journal, chat history, alarms + verify + XP, dashboard, weekly report, and 401 protection on all secured endpoints all work correctly. The 2 failing tests are BOTH AI-integration tests (POST /api/goals/{id}/generate-plan and POST /api/chat/message) and share the SAME root cause visible in backend logs: `litellm.BadRequestError: OpenAIException - Budget has been exceeded! Current cost: 0.0, Max budget: 0.0`. The emergentintegrations LlmChat call fails, and the endpoints fall back to a static plan / static error message. Code path is correct; issue is with the EMERGENT_LLM_KEY (sk-emergent-95b8aA1375836CaDeD) budget in this environment. Also observed a benign passlib bcrypt version warning (`AttributeError: module 'bcrypt' has no attribute '__about__'`) that does not affect functionality.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "POST /api/goals/{goal_id}/generate-plan",
+        "issue": "AI plan generation returns fallback plan because emergentintegrations/LiteLLM call fails with 'Budget has been exceeded! Current cost: 0.0, Max budget: 0.0'. Response summary is 'Let's work toward: ...' (fallback string). LLM key budget appears exhausted / not provisioned. Not a code bug.",
+        "priority": "CRITICAL"
+      },
+      {
+        "endpoint": "POST /api/chat/message",
+        "issue": "Chat reply is the static fallback string 'I'm having trouble connecting right now, but I'm still here for you...' due to the same LiteLLM budget error. History persistence still works (user + assistant messages saved).",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "startup",
+        "issue": "passlib logs 'AttributeError: module bcrypt has no attribute __about__' warning. bcrypt still functions (register/login/password verification all pass). Consider pinning bcrypt<4 or upgrading passlib."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_riseup_backend.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Investigate EMERGENT_LLM_KEY budget: LiteLLM reports 'Max budget: 0.0'. Verify the key in /app/backend/.env is provisioned with budget, or rotate/refresh the universal key.",
+    "Optionally add richer error surfacing: when the LLM call fails, return an HTTP 502/503 or include an 'ai_error' flag in the response so the client can distinguish real AI output from the fallback string.",
+    "Pin bcrypt version (bcrypt<4) or upgrade passlib to silence the __about__ warning."
+  ],
+  "critical_code_review_comments": [
+    "server.py is 730 lines — approaching the 700-line threshold; consider splitting into routers/{auth,goals,tasks,chat,...}.py modules.",
+    "Level calculation `current_xp // 100 + 1` inside task-complete handler uses the pre-increment xp value from the request context; MongoDB $inc runs atomically but the level $set uses the stale computed value. For concurrent completions this could set a lower level. Use aggregation pipeline update or read-after-write.",
+    "Similar concurrent-update patterns for xp on habit check and alarm verify use $inc (safe) but do not recompute level.",
+    "personality_prompt is defined but bypassed inside /goals/{id}/generate-plan (uses its own inline system prompt).",
+    "No pagination on list endpoints (goals/tasks/chat_messages) — .to_list(500) is a hard cap.",
+    "JWT_SECRET_KEY is committed to /app/backend/.env — expected for dev but flag for production."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_riseup_backend.py (new)",
+    "/app/backend/tests/__init__.py (new)"
+  ],
+  "success_rate": {
+    "backend": "93.75% (30/32)",
+    "frontend": "not tested (backend-only request)"
+  },
+  "seed_data_creation": "Each pytest run creates a fresh user test+<timestamp>@riseup.io / Test1234 plus one goal, tasks, habit, mood, journal, chat messages, and one alarm scoped to that user. Data is not cleaned up (main agent may add teardown if needed).",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "After the EMERGENT_LLM_KEY budget is fixed, re-run `pytest /app/backend/tests/test_riseup_backend.py -v` — only test_23_generate_ai_plan and test_60_chat_message need to be validated. All other flows are stable. Public base URL comes from frontend/.env EXPO_PUBLIC_BACKEND_URL. The test file already handles both EXPO_PUBLIC_BACKEND_URL and EXPO_BACKEND_URL env var names.",
+  "rca_of_issue": "Reproduction: `pytest backend/tests/test_riseup_backend.py::test_23_generate_ai_plan -v`. Backend log shows: 'LiteLLM completion() model=claude-sonnet-4-5-20250929; provider=openai' followed by 'litellm.BadRequestError: OpenAIException - Budget has been exceeded! Current cost: 0.0, Max budget: 0.0'. The emergentintegrations library proxies Anthropic Claude calls through LiteLLM's OpenAI-compatible transport pointing at the Emergent proxy. The proxy is rejecting the request because the universal key has no budget assigned. Mitigation: (a) provision budget on EMERGENT_LLM_KEY, or (b) rotate the key via the Emergent platform. No code change required; call_llm() already handles the exception and returns the fallback."
+}

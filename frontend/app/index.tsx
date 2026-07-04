@@ -1,30 +1,39 @@
-import { Text, View, StyleSheet, Image } from "react-native";
-
-const EXPO_PUBLIC_BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
+import { useEffect } from "react";
+import { View, ActivityIndicator, StyleSheet, Text } from "react-native";
+import { Redirect } from "expo-router";
+import { useAuth } from "@/src/context/AuthContext";
+import { colors } from "@/src/theme";
 
 export default function Index() {
-  console.log(EXPO_PUBLIC_BACKEND_URL, "EXPO_PUBLIC_BACKEND_URL");
+  const { user, loading } = useAuth();
 
-  return (
-    <View style={styles.container}>
-      <Image
-        source={require("../assets/images/app-image.png")}
-        style={styles.image}
-      />
-    </View>
-  );
+  useEffect(() => {
+    // no-op
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.container} testID="splash-loading">
+        <Text style={styles.brand}>RiseUp AI</Text>
+        <Text style={styles.tagline}>Your AI Friend Who Never Lets You Give Up</Text>
+        <ActivityIndicator color={colors.primary} size="large" style={{ marginTop: 24 }} />
+      </View>
+    );
+  }
+
+  if (!user) return <Redirect href="/(auth)/welcome" />;
+  if (!user.onboarded) return <Redirect href="/onboarding" />;
+  return <Redirect href="/(tabs)" />;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#0c0c0c",
+    backgroundColor: colors.bg,
     alignItems: "center",
     justifyContent: "center",
+    paddingHorizontal: 24,
   },
-  image: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-  },
+  brand: { color: colors.text, fontSize: 40, fontWeight: "800", letterSpacing: -1 },
+  tagline: { color: colors.textSecondary, marginTop: 8, textAlign: "center", fontSize: 14 },
 });
